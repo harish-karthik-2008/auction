@@ -50,7 +50,7 @@ export default function App() {
   const [errorMessage, setErrorMessage] = useState('');
 
   // Configuration modal state
-  const [configNumTeams, setConfigNumTeams] = useState(state.teams.length || 4);
+  const [configNumTeams, setConfigNumTeams] = useState(state.teams.length || 10);
   const [configPurse, setConfigPurse] = useState(state.startingPurse || 30000000);
   const [configAuctioneerName, setConfigAuctioneerName] = useState(state.auctioneerName || 'Master Auctioneer');
 
@@ -113,7 +113,7 @@ export default function App() {
     const availablePurse = (teamStats?.remainingPurse || 0) + currentPriceCredit;
 
     if (price > availablePurse) {
-      setErrorMessage(`Insufficient funds: ${teamStats?.teamName} only has ${availablePurse.toLocaleString()} pts available.`);
+      setErrorMessage(`Insufficient funds: ${teamStats?.teamName} only has ¥${availablePurse.toLocaleString()} available.`);
       return;
     }
 
@@ -1000,29 +1000,36 @@ export default function App() {
 
               <div>
                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '6px' }}>
-                  Number of Teams ({configNumTeams})
+                  Number of Teams ({configNumTeams} Teams)
                 </label>
                 <input
                   type="range"
                   min="2"
-                  max="8"
+                  max="10"
                   value={configNumTeams}
                   onChange={(e) => setConfigNumTeams(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--sakura-primary)' }}
                 />
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                  <span>2 Teams</span>
+                  <span>4 Teams</span>
+                  <span>6 Teams</span>
+                  <span>8 Teams</span>
+                  <span>10 Teams</span>
+                </div>
               </div>
 
               <div>
                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '6px' }}>
-                  Starting Purse Per Team (Points)
+                  Starting Purse Per Team (¥ Yen)
                 </label>
                 <input
                   type="number"
                   className="jp-input"
                   value={configPurse}
                   onChange={(e) => setConfigPurse(e.target.value)}
-                  step="5000"
-                  min="10000"
+                  step="1000000"
+                  min="1000000"
                   required
                 />
               </div>

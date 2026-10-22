@@ -49,11 +49,11 @@ function generateRoomCode(state) {
 }
 
 const TEAM_COLORS = [
-  '#ff758f', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#14b8a6', '#d97706'
+  '#ff758f', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#14b8a6', '#d97706', '#6366f1', '#ec4899', '#84cc16', '#06b6d4'
 ];
 
 export const clientStore = {
-  createGame({ auctioneerName = 'Master Auctioneer', numTeams = 4, startingPurse = 100000, customTeamNames = [] }) {
+  createGame({ auctioneerName = 'Master Auctioneer', numTeams = 10, startingPurse = 30000000, customTeamNames = [] }) {
     const state = loadState();
     const gameId = generateId();
     const roomCode = generateRoomCode(state);
@@ -64,7 +64,7 @@ export const clientStore = {
       roomCode,
       auctioneerSecret,
       auctioneerName,
-      startingPurse: Number(startingPurse) || 100000,
+      startingPurse: Number(startingPurse) || 30000000,
       status: 'WAITING',
       currentPlaceId: null,
       createdAt: new Date().toISOString(),
@@ -73,10 +73,10 @@ export const clientStore = {
     state.games[gameId] = game;
 
     // Teams
-    const count = Math.max(2, Math.min(Number(numTeams) || 4, 8));
+    const count = Math.max(2, Math.min(Number(numTeams) || 10, 12));
     for (let i = 0; i < count; i++) {
       const teamId = generateId();
-      const defaultName = customTeamNames[i] || `Team ${['Sakura', 'Samurai', 'Shogun', 'Ninja', 'Ronin', 'Kitsune', 'Dragon', 'Phoenix'][i] || (i + 1)}`;
+      const defaultName = customTeamNames[i] || `Team ${['Sakura', 'Samurai', 'Shogun', 'Ninja', 'Ronin', 'Kitsune', 'Dragon', 'Phoenix', 'Daimyo', 'Kabuki', 'Bonsai', 'Origami'][i] || (i + 1)}`;
       const teamToken = generateId();
       state.teams[teamId] = {
         id: teamId,

@@ -65,13 +65,17 @@ const TEAM_COLORS = [
   { name: 'Violet Geisha', code: '#8b5cf6' },
   { name: 'Crimson Torii', code: '#ef4444' },
   { name: 'Teal Onsen', code: '#14b8a6' },
-  { name: 'Bronze Pagoda', code: '#d97706' }
+  { name: 'Bronze Pagoda', code: '#d97706' },
+  { name: 'Daimyo Iris', code: '#6366f1' },
+  { name: 'Kabuki Rose', code: '#ec4899' },
+  { name: 'Bonsai Olive', code: '#84cc16' },
+  { name: 'Origami Cyan', code: '#06b6d4' }
 ];
 
 /**
  * Create a new Game
  */
-function createGame({ auctioneerName, numTeams = 4, startingPurse = 100000, customTeamNames = [] }) {
+function createGame({ auctioneerName, numTeams = 10, startingPurse = 30000000, customTeamNames = [] }) {
   const gameId = uuidv4();
   const roomCode = generateRoomCode();
   const auctioneerSecret = uuidv4(); // Kept private to creator
@@ -81,7 +85,7 @@ function createGame({ auctioneerName, numTeams = 4, startingPurse = 100000, cust
     roomCode,
     auctioneerSecret,
     auctioneerName: auctioneerName || 'Master Auctioneer',
-    startingPurse: Number(startingPurse) || 100000,
+    startingPurse: Number(startingPurse) || 30000000,
     status: 'WAITING', // WAITING, IN_PROGRESS, ENDED
     currentPlaceId: null,
     createdAt: new Date().toISOString(),
@@ -91,10 +95,10 @@ function createGame({ auctioneerName, numTeams = 4, startingPurse = 100000, cust
   state.games[gameId] = game;
 
   // Initialize Teams
-  const teamsCount = Math.max(2, Math.min(Number(numTeams) || 4, 12));
+  const teamsCount = Math.max(2, Math.min(Number(numTeams) || 10, 12));
   for (let i = 0; i < teamsCount; i++) {
     const teamId = uuidv4();
-    const defaultName = customTeamNames[i] || `Team ${['Sakura', 'Samurai', 'Shogun', 'Ninja', 'Ronin', 'Kitsune', 'Dragon', 'Phoenix'][i] || (i + 1)}`;
+    const defaultName = customTeamNames[i] || `Team ${['Sakura', 'Samurai', 'Shogun', 'Ninja', 'Ronin', 'Kitsune', 'Dragon', 'Phoenix', 'Daimyo', 'Kabuki', 'Bonsai', 'Origami'][i] || (i + 1)}`;
     const teamToken = uuidv4();
     const color = TEAM_COLORS[i % TEAM_COLORS.length];
 

@@ -1,7 +1,7 @@
 // Complete, self-contained Auctioneer Engine with localStorage persistence
 import { defaultPlacesList } from '../services/defaultPlacesList';
 
-const STORAGE_KEY = 'japan_auction_arena_30_cities_v1';
+const STORAGE_KEY = 'japan_auction_arena_10_teams_v1';
 
 const TEAM_PRESETS = [
   { name: 'Team Sakura', color: '#ff758f' },
@@ -11,7 +11,11 @@ const TEAM_PRESETS = [
   { name: 'Team Ronin', color: '#8b5cf6' },
   { name: 'Team Kitsune', color: '#ef4444' },
   { name: 'Team Dragon', color: '#14b8a6' },
-  { name: 'Team Phoenix', color: '#d97706' }
+  { name: 'Team Phoenix', color: '#d97706' },
+  { name: 'Team Daimyo', color: '#6366f1' },
+  { name: 'Team Kabuki', color: '#ec4899' },
+  { name: 'Team Bonsai', color: '#84cc16' },
+  { name: 'Team Origami', color: '#06b6d4' }
 ];
 
 function generateId() {
@@ -19,9 +23,9 @@ function generateId() {
 }
 
 // Initial state builder
-export function createInitialState(numTeams = 4, startingPurse = 30000000, auctioneerName = 'Master Auctioneer') {
+export function createInitialState(numTeams = 10, startingPurse = 30000000, auctioneerName = 'Master Auctioneer') {
   const teams = [];
-  const teamCount = Math.max(2, Math.min(Number(numTeams) || 4, 8));
+  const teamCount = Math.max(2, Math.min(Number(numTeams) || 10, 10));
 
   for (let i = 0; i < teamCount; i++) {
     const preset = TEAM_PRESETS[i % TEAM_PRESETS.length];
