@@ -27,6 +27,7 @@ import {
   loadAuctionState,
   saveAuctionState,
   createInitialState,
+  resetToOfficialCatalog,
   calculateLeaderboard,
   calculateTeamStats
 } from './store/auctionStore';
@@ -298,6 +299,21 @@ export default function App() {
 
         {/* Header Action Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => {
+              if (window.confirm('Reset catalog to official 30 Japanese cities with tiered prices (¥3M, ¥2M, ¥1M) and 10 teams?')) {
+                const fresh = resetToOfficialCatalog();
+                setState(fresh);
+              }
+            }}
+            className="btn-navy"
+            style={{ padding: '8px 16px', fontSize: '0.85rem', border: '1px solid rgba(255, 117, 143, 0.4)' }}
+            title="Reload official 30 cities with ¥3M/¥2M/¥1M base prizes and 10 teams"
+          >
+            <RotateCcw size={15} color="var(--sakura-primary)" />
+            <span>Reset Official 30 Cities</span>
+          </button>
+
           <button
             onClick={() => setIsConfigModalOpen(true)}
             className="btn-navy"
@@ -849,7 +865,7 @@ export default function App() {
                   {sellingPlace.name}
                 </h4>
                 <div style={{ fontSize: '0.8rem', color: 'var(--sakura-light)', marginTop: '2px' }}>
-                  Base: {Number(sellingPlace.basePrize).toLocaleString()} pts • Ref Value: {Number(sellingPlace.originalValue).toLocaleString()} pts
+                  Base: ¥{Number(sellingPlace.basePrize).toLocaleString()} • Ref Value: ¥{Number(sellingPlace.originalValue).toLocaleString()}
                 </div>
               </div>
             </div>
@@ -885,7 +901,7 @@ export default function App() {
                     const stats = leaderboard.find(l => l.teamId === t.id);
                     return (
                       <option key={t.id} value={t.id}>
-                        {t.name} (Remaining: {stats?.remainingPurse.toLocaleString()} pts)
+                        {t.name} (Remaining: ¥{stats?.remainingPurse.toLocaleString()})
                       </option>
                     );
                   })}
@@ -895,7 +911,7 @@ export default function App() {
               {/* Enter Purchased Price */}
               <div>
                 <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '8px' }}>
-                  Final Purchased Price (Points)
+                  Final Purchased Price (¥ Yen)
                 </label>
                 <input
                   type="number"
@@ -917,7 +933,7 @@ export default function App() {
                   border: '1px solid rgba(16, 185, 129, 0.3)',
                   color: '#34d399'
                 }}>
-                  Selected: <strong>{selectedBuyerTeam.name}</strong> • Current Remaining Purse: {leaderboard.find(l => l.teamId === selectedBuyerTeam.id)?.remainingPurse.toLocaleString()} pts
+                  Selected: <strong>{selectedBuyerTeam.name}</strong> • Current Remaining Purse: ¥{leaderboard.find(l => l.teamId === selectedBuyerTeam.id)?.remainingPurse.toLocaleString()}
                 </div>
               )}
 

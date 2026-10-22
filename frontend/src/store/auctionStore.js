@@ -1,7 +1,7 @@
 // Complete, self-contained Auctioneer Engine with localStorage persistence
 import { defaultPlacesList } from '../services/defaultPlacesList';
 
-const STORAGE_KEY = 'japan_auction_arena_3tiered_base_v1';
+const STORAGE_KEY = 'japan_auction_arena_tiered_prices_v2';
 
 const TEAM_PRESETS = [
   { name: 'Team Sakura', color: '#ff758f' },
@@ -54,7 +54,7 @@ export function createInitialState(numTeams = 10, startingPurse = 30000000, auct
 
   return {
     auctioneerName,
-    startingPurse: Number(startingPurse) || 100000,
+    startingPurse: Number(startingPurse) || 30000000,
     status: 'IN_PROGRESS', // 'IN_PROGRESS', 'ENDED'
     teams,
     places,
@@ -64,20 +64,55 @@ export function createInitialState(numTeams = 10, startingPurse = 30000000, auct
   };
 }
 
-// Load state from localStorage
+// Load state from localStorage with automatic schema validation & tiered price enforcement
 export function loadAuctionState() {
   try {
+    // Clear all legacy storage keys so user's browser does not serve old caches
+    const legacyKeys = [
+      'japan_auction_arena_30_cities_v1',
+      'japan_auction_arena_10_teams_v1',
+      'japan_auction_arena_3tiered_base_v1',
+      'jp_auction_arena_db_v1',
+      'japan_auction_arena_cache',
+      'auction_state'
+    ];
+    legacyKeys.forEach(k => {
+      try { localStorage.removeItem(k); } catch (e) {}
+    });
+
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (parsed.teams && parsed.places) {
+      // Validate 30 cities, 10 teams, and correct tiered base prizes
+      const hasTieredPrices =
+        parsed.places &&
+        parsed.places.length === 30 &&
+        parsed.places[0]?.basePrize === 3000000 &&
+        parsed.places[10]?.basePrize === 2000000 &&
+        parsed.places[20]?.basePrize === 1000000;
+
+      const hasTenTeams = parsed.teams && parsed.teams.length >= 10;
+
+      if (hasTieredPrices && hasTenTeams) {
         return parsed;
       }
     }
   } catch (err) {
     console.error('Error loading auction state:', err);
   }
-  const fresh = createInitialState();
+
+  // Create clean state with 10 teams and 30 tiered cities
+  const fresh = createInitialState(10, 30000000);
+  saveAuctionState(fresh);
+  return fresh;
+}
+
+// Reset tournament to official state
+export function resetToOfficialCatalog() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (e) {}
+  const fresh = createInitialState(10, 30000000);
   saveAuctionState(fresh);
   return fresh;
 }
@@ -93,10 +128,6 @@ export function saveAuctionState(state) {
 
 /**
  * Section 4 Valuation Engine
- * Remaining Purse = Starting Purse - Total Purchased Cost
- * Total Original Value = Sum of original reference values of owned places
- * Total Current Team Value = Remaining Purse + Total Original Value
- * Auction Gain = Total Current Team Value - Starting Purse
  */
 export function calculateTeamStats(state, teamId) {
   const team = state.teams.find(t => t.id === teamId);
@@ -138,7 +169,6 @@ export function calculateTeamStats(state, teamId) {
 
 /**
  * Section 5 Leaderboard & Tie-Breaker Engine
- * Ranks by Total Current Team Value (descending), then Remaining Purse (descending).
  */
 export function calculateLeaderboard(state) {
   const statsList = state.teams.map(t => calculateTeamStats(state, t.id));
