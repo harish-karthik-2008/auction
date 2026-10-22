@@ -1,7 +1,7 @@
 // Complete, self-contained Auctioneer Engine with localStorage persistence
 import { defaultPlacesList } from '../services/defaultPlacesList';
 
-const STORAGE_KEY = 'japan_auction_arena_10_teams_v1';
+const STORAGE_KEY = 'japan_auction_arena_3tiered_base_v1';
 
 const TEAM_PRESETS = [
   { name: 'Team Sakura', color: '#ff758f' },
