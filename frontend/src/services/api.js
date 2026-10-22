@@ -1,9 +1,7 @@
 import { io } from 'socket.io-client';
+import { clientStore } from './clientStore';
 
 // Determine backend URL intelligently
-// If VITE_API_URL is configured, use it.
-// If running on Vite dev server (e.g. port 5173), target the Node backend on port 5000.
-// Otherwise, use current origin (for unified Express deployment or Vercel serverless).
 const getBackendUrl = () => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL.replace(/\/$/, '');
@@ -21,41 +19,83 @@ const getBackendUrl = () => {
 const BACKEND_URL = getBackendUrl();
 const API_BASE = `${BACKEND_URL}/api`;
 
-// Socket singleton
-let socket = null;
+// Hybrid Socket & BroadcastChannel dispatcher
+let realSocket = null;
+const eventListeners = {};
 
-export function getSocket() {
-  if (!socket) {
-    socket = io(BACKEND_URL, {
-      transports: ['websocket', 'polling'],
-      reconnection: true,
-      reconnectionAttempts: 30,
-      reconnectionDelay: 1000
-    });
-  }
-  return socket;
+// BroadcastChannel for cross-tab local synchronization
+let broadcastChannel = null;
+if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+  broadcastChannel = new BroadcastChannel('jp_auction_arena_channel');
+  broadcastChannel.onmessage = (event) => {
+    if (event.data?.type === 'SYNC_STATE') {
+      triggerLocalStateRefresh();
+    }
+  };
 }
 
-// Safe response parser that prevents "Unexpected token < or T in JSON"
-async function handleResponse(res, fallbackMessage) {
-  const text = await res.text();
-  let data;
+let activeRoleSession = null;
+
+function triggerLocalStateRefresh() {
+  if (!activeRoleSession) return;
   try {
-    data = JSON.parse(text);
-  } catch (err) {
-    // If not JSON (e.g. 404 HTML page, 502 Bad Gateway, or proxy error)
-    if (!res.ok) {
-      throw new Error(
-        `Server communication error (${res.status} ${res.statusText}). Please check that the backend server is running.`
-      );
+    if (activeRoleSession.role === 'auctioneer' && activeRoleSession.gameId) {
+      const state = clientStore.getAuctioneerState(activeRoleSession.gameId);
+      emitLocalEvent('auctioneer:state', state);
+    } else if (activeRoleSession.role === 'team' && activeRoleSession.teamToken) {
+      const state = clientStore.getTeamState(activeRoleSession.teamToken);
+      emitLocalEvent('team:state', state);
     }
-    throw new Error(`Unexpected non-JSON response from server: ${text.slice(0, 100)}...`);
+  } catch (e) {
+    // Game might have been reset
+  }
+}
+
+function emitLocalEvent(event, data) {
+  if (eventListeners[event]) {
+    eventListeners[event].forEach(cb => cb(data));
+  }
+}
+
+export function getSocket() {
+  if (!realSocket) {
+    try {
+      realSocket = io(BACKEND_URL, {
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionAttempts: 10,
+        reconnectionDelay: 1000,
+        timeout: 4000
+      });
+
+      realSocket.on('auctioneer:state', (data) => emitLocalEvent('auctioneer:state', data));
+      realSocket.on('team:state', (data) => emitLocalEvent('team:state', data));
+    } catch (e) {
+      console.warn('Socket.IO initialization failed, using in-browser synchronization:', e);
+    }
   }
 
-  if (!res.ok) {
-    throw new Error(data.error || data.message || fallbackMessage || `Request failed with status ${res.status}`);
-  }
-  return data;
+  return {
+    emit(event, payload) {
+      if (event === 'join:auctioneer') {
+        activeRoleSession = { role: 'auctioneer', gameId: payload.gameId };
+      } else if (event === 'join:team') {
+        activeRoleSession = { role: 'team', teamToken: payload.teamToken };
+      }
+      if (realSocket && realSocket.connected) {
+        realSocket.emit(event, payload);
+      }
+    },
+    on(event, callback) {
+      if (!eventListeners[event]) eventListeners[event] = [];
+      eventListeners[event].push(callback);
+    },
+    off(event, callback) {
+      if (eventListeners[event]) {
+        eventListeners[event] = eventListeners[event].filter(cb => cb !== callback);
+      }
+    }
+  };
 }
 
 // 1. Create Game
@@ -66,27 +106,32 @@ export async function createGame(payload) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    return await handleResponse(res, 'Failed to create auction');
-  } catch (err) {
-    if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
-      throw new Error('Cannot connect to backend server. Make sure "npm run dev" or "npm start" is running on port 5000.');
+    if (res.ok) {
+      return await res.json();
     }
-    throw err;
+  } catch (err) {
+    console.warn('Backend unavailable, activating in-browser engine fallback:', err);
   }
+
+  // Seamless fallback to client store
+  const localResult = clientStore.createGame(payload);
+  activeRoleSession = { role: 'auctioneer', gameId: localResult.gameId };
+  return localResult;
 }
 
 // 2. Get Teams for Room
 export async function getRoomTeams(roomCode) {
   try {
     const res = await fetch(`${API_BASE}/games/${roomCode}/teams`);
-    const data = await handleResponse(res, 'Room not found');
-    return data.teams;
-  } catch (err) {
-    if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
-      throw new Error('Cannot connect to backend server. Check server connection.');
+    if (res.ok) {
+      const data = await res.json();
+      return data.teams;
     }
-    throw err;
+  } catch (err) {
+    // Fallback to clientStore
   }
+
+  return clientStore.getRoomTeams(roomCode);
 }
 
 // 3. Join Game as Team
@@ -97,47 +142,72 @@ export async function joinGame(roomCode, teamNameOrId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ teamNameOrId })
     });
-    return await handleResponse(res, 'Failed to join auction');
+    if (res.ok) {
+      return await res.json();
+    }
   } catch (err) {
-    if (err.message.includes('Failed to fetch')) {
-      throw new Error('Cannot connect to backend server.');
-    }
-    throw err;
+    // Fallback to clientStore
   }
+
+  const localResult = clientStore.joinGame(roomCode, teamNameOrId);
+  activeRoleSession = { role: 'team', teamToken: localResult.teamToken };
+  return localResult;
 }
 
-// 4. Auctioneer Master State
+// 4. Fetch Auctioneer State
 export async function fetchAuctioneerState(gameId, secret) {
-  const res = await fetch(`${API_BASE}/auctioneer/state`, {
-    headers: {
-      'x-game-id': gameId,
-      'x-auctioneer-secret': secret
+  try {
+    const res = await fetch(`${API_BASE}/auctioneer/state`, {
+      headers: { 'x-game-id': gameId, 'x-auctioneer-secret': secret }
+    });
+    if (res.ok) {
+      return await res.json();
     }
-  });
-  return await handleResponse(res, 'Failed to fetch auctioneer state');
+  } catch (err) {
+    // Fallback
+  }
+
+  activeRoleSession = { role: 'auctioneer', gameId };
+  return clientStore.getAuctioneerState(gameId);
 }
 
-// 5. Team Filtered State
+// 5. Fetch Team State
 export async function fetchTeamState(teamToken) {
-  const res = await fetch(`${API_BASE}/team/state`, {
-    headers: {
-      'x-team-token': teamToken
+  try {
+    const res = await fetch(`${API_BASE}/team/state`, {
+      headers: { 'x-team-token': teamToken }
+    });
+    if (res.ok) {
+      return await res.json();
     }
-  });
-  return await handleResponse(res, 'Failed to fetch team state');
+  } catch (err) {
+    // Fallback
+  }
+
+  activeRoleSession = { role: 'team', teamToken };
+  return clientStore.getTeamState(teamToken);
 }
 
 // 6. Auctioneer Actions
 export async function auctioneerAction(endpoint, method = 'POST', gameId, secret, body = null) {
-  const headers = {
-    'x-game-id': gameId,
-    'x-auctioneer-secret': secret,
-    'Content-Type': 'application/json'
-  };
+  try {
+    const headers = {
+      'x-game-id': gameId,
+      'x-auctioneer-secret': secret,
+      'Content-Type': 'application/json'
+    };
+    const options = { method, headers };
+    if (body) options.body = JSON.stringify(body);
 
-  const options = { method, headers };
-  if (body) options.body = JSON.stringify(body);
+    const res = await fetch(`${API_BASE}/auctioneer/${endpoint}`, options);
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    // Fallback
+  }
 
-  const res = await fetch(`${API_BASE}/auctioneer/${endpoint}`, options);
-  return await handleResponse(res, 'Auctioneer operation failed');
+  const localRes = clientStore.auctioneerAction(endpoint, gameId, body);
+  triggerLocalStateRefresh();
+  return localRes;
 }
