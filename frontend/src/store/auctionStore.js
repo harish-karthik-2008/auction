@@ -1,7 +1,7 @@
 // Complete, self-contained Auctioneer Engine with localStorage persistence
 import { defaultPlacesList } from '../services/defaultPlacesList';
 
-const STORAGE_KEY = 'japan_auction_arena_master_v2';
+const STORAGE_KEY = 'japan_auction_arena_30_cities_v1';
 
 const TEAM_PRESETS = [
   { name: 'Team Sakura', color: '#ff758f' },
@@ -19,7 +19,7 @@ function generateId() {
 }
 
 // Initial state builder
-export function createInitialState(numTeams = 4, startingPurse = 100000, auctioneerName = 'Master Auctioneer') {
+export function createInitialState(numTeams = 4, startingPurse = 30000000, auctioneerName = 'Master Auctioneer') {
   const teams = [];
   const teamCount = Math.max(2, Math.min(Number(numTeams) || 4, 8));
 
@@ -29,8 +29,8 @@ export function createInitialState(numTeams = 4, startingPurse = 100000, auction
       id: generateId(),
       name: preset.name,
       color: preset.color,
-      startingPurse: Number(startingPurse) || 100000,
-      remainingPurse: Number(startingPurse) || 100000
+      startingPurse: Number(startingPurse) || 30000000,
+      remainingPurse: Number(startingPurse) || 30000000
     });
   }
 

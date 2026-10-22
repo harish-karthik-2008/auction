@@ -51,7 +51,7 @@ export default function App() {
 
   // Configuration modal state
   const [configNumTeams, setConfigNumTeams] = useState(state.teams.length || 4);
-  const [configPurse, setConfigPurse] = useState(state.startingPurse || 100000);
+  const [configPurse, setConfigPurse] = useState(state.startingPurse || 30000000);
   const [configAuctioneerName, setConfigAuctioneerName] = useState(state.auctioneerName || 'Master Auctioneer');
 
   // Auto-persist state changes
@@ -373,7 +373,7 @@ export default function App() {
                   color: '#34d399',
                   letterSpacing: '0.02em'
                 }}>
-                  {team.remainingPurse.toLocaleString()} <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>pts</span>
+                  ¥{team.remainingPurse.toLocaleString()}
                 </div>
               </div>
 
@@ -387,7 +387,7 @@ export default function App() {
                 borderTop: '1px solid rgba(255, 255, 255, 0.08)'
               }}>
                 <span>Acquired: <strong style={{ color: '#ffffff' }}>{team.placesPurchasedCount}</strong></span>
-                <span>Gain: <strong style={{ color: team.auctionGain >= 0 ? '#34d399' : '#f87171' }}>{team.auctionGain >= 0 ? '+' : ''}{team.auctionGain.toLocaleString()}</strong></span>
+                <span>Gain: <strong style={{ color: team.auctionGain >= 0 ? '#34d399' : '#f87171' }}>{team.auctionGain >= 0 ? '+' : ''}¥{team.auctionGain.toLocaleString()}</strong></span>
               </div>
             </div>
           ))}
@@ -571,7 +571,7 @@ export default function App() {
                               Base Starting Prize
                             </span>
                             <div style={{ fontWeight: 800, color: '#ffffff', fontSize: '0.98rem' }}>
-                              {Number(place.basePrize).toLocaleString()} pts
+                              ¥{Number(place.basePrize).toLocaleString()}
                             </div>
                           </div>
                           <div>
@@ -579,7 +579,7 @@ export default function App() {
                               Reference Value
                             </span>
                             <div style={{ fontWeight: 800, color: '#93c5fd', fontSize: '0.98rem' }}>
-                              {Number(place.originalValue).toLocaleString()} pts
+                              ¥{Number(place.originalValue).toLocaleString()}
                             </div>
                           </div>
                         </div>
@@ -605,7 +605,7 @@ export default function App() {
                               </span>
                             </div>
                             <div style={{ color: '#ffffff', fontSize: '0.85rem', marginTop: '2px', fontWeight: 600 }}>
-                              Price: {Number(place.purchasedPrice).toLocaleString()} pts
+                              Price: ¥{Number(place.purchasedPrice).toLocaleString()}
                             </div>
                           </div>
                         )}
