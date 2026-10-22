@@ -7,6 +7,10 @@ const getBackendUrl = () => {
     return import.meta.env.VITE_API_URL.replace(/\/$/, '');
   }
   if (typeof window !== 'undefined') {
+    // Check if user set custom backend in localStorage
+    const savedCustomUrl = localStorage.getItem('jp_custom_backend_url');
+    if (savedCustomUrl) return savedCustomUrl.replace(/\/$/, '');
+
     const { hostname, port, protocol } = window.location;
     if ((hostname === 'localhost' || hostname === '127.0.0.1') && port === '5173') {
       return `${protocol}//${hostname}:5000`;
@@ -16,14 +20,29 @@ const getBackendUrl = () => {
   return 'http://localhost:5000';
 };
 
-const BACKEND_URL = getBackendUrl();
-const API_BASE = `${BACKEND_URL}/api`;
+let BACKEND_URL = getBackendUrl();
+let API_BASE = `${BACKEND_URL}/api`;
+
+// Helper: Safely parse JSON without throwing "Unexpected end of JSON input"
+async function safeJson(res) {
+  if (!res) return null;
+  const contentType = res.headers ? (res.headers.get('content-type') || '') : '';
+  if (!contentType.includes('application/json')) {
+    return null;
+  }
+  try {
+    const text = await res.text();
+    if (!text || !text.trim()) return null;
+    return JSON.parse(text);
+  } catch (err) {
+    return null;
+  }
+}
 
 // Hybrid Socket & BroadcastChannel dispatcher
 let realSocket = null;
 const eventListeners = {};
 
-// BroadcastChannel for cross-tab local synchronization
 let broadcastChannel = null;
 if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
   broadcastChannel = new BroadcastChannel('jp_auction_arena_channel');
@@ -47,7 +66,7 @@ function triggerLocalStateRefresh() {
       emitLocalEvent('team:state', state);
     }
   } catch (e) {
-    // Game might have been reset
+    // Session state
   }
 }
 
@@ -106,14 +125,14 @@ export async function createGame(payload) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    if (res.ok) {
-      return await res.json();
+    const data = await safeJson(res);
+    if (res.ok && data) {
+      return data;
     }
   } catch (err) {
-    console.warn('Backend unavailable, activating in-browser engine fallback:', err);
+    console.warn('Backend unavailable, using in-browser store:', err);
   }
 
-  // Seamless fallback to client store
   const localResult = clientStore.createGame(payload);
   activeRoleSession = { role: 'auctioneer', gameId: localResult.gameId };
   return localResult;
@@ -123,15 +142,19 @@ export async function createGame(payload) {
 export async function getRoomTeams(roomCode) {
   try {
     const res = await fetch(`${API_BASE}/games/${roomCode}/teams`);
-    if (res.ok) {
-      const data = await res.json();
+    const data = await safeJson(res);
+    if (res.ok && data && data.teams) {
       return data.teams;
     }
   } catch (err) {
-    // Fallback to clientStore
+    // Fallback
   }
 
-  return clientStore.getRoomTeams(roomCode);
+  try {
+    return clientStore.getRoomTeams(roomCode);
+  } catch (e) {
+    throw new Error(`Room code "${roomCode}" was not found. If joining from another device, ensure both devices are connected to the same server.`);
+  }
 }
 
 // 3. Join Game as Team
@@ -142,16 +165,21 @@ export async function joinGame(roomCode, teamNameOrId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ teamNameOrId })
     });
-    if (res.ok) {
-      return await res.json();
+    const data = await safeJson(res);
+    if (res.ok && data && data.teamToken) {
+      return data;
     }
   } catch (err) {
-    // Fallback to clientStore
+    // Fallback
   }
 
-  const localResult = clientStore.joinGame(roomCode, teamNameOrId);
-  activeRoleSession = { role: 'team', teamToken: localResult.teamToken };
-  return localResult;
+  try {
+    const localResult = clientStore.joinGame(roomCode, teamNameOrId);
+    activeRoleSession = { role: 'team', teamToken: localResult.teamToken };
+    return localResult;
+  } catch (e) {
+    throw new Error(`Room code "${roomCode}" not found. If this room was created on your computer, both devices must be on the same server to play together.`);
+  }
 }
 
 // 4. Fetch Auctioneer State
@@ -160,8 +188,9 @@ export async function fetchAuctioneerState(gameId, secret) {
     const res = await fetch(`${API_BASE}/auctioneer/state`, {
       headers: { 'x-game-id': gameId, 'x-auctioneer-secret': secret }
     });
-    if (res.ok) {
-      return await res.json();
+    const data = await safeJson(res);
+    if (res.ok && data) {
+      return data;
     }
   } catch (err) {
     // Fallback
@@ -177,8 +206,9 @@ export async function fetchTeamState(teamToken) {
     const res = await fetch(`${API_BASE}/team/state`, {
       headers: { 'x-team-token': teamToken }
     });
-    if (res.ok) {
-      return await res.json();
+    const data = await safeJson(res);
+    if (res.ok && data) {
+      return data;
     }
   } catch (err) {
     // Fallback
@@ -200,8 +230,9 @@ export async function auctioneerAction(endpoint, method = 'POST', gameId, secret
     if (body) options.body = JSON.stringify(body);
 
     const res = await fetch(`${API_BASE}/auctioneer/${endpoint}`, options);
-    if (res.ok) {
-      return await res.json();
+    const data = await safeJson(res);
+    if (res.ok && data) {
+      return data;
     }
   } catch (err) {
     // Fallback
