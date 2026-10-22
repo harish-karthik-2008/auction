@@ -77,16 +77,16 @@
       "createdAt": "2026-10-22T15:23:12.374Z",
       "endedAt": "2026-10-22T15:27:43.756Z"
     },
-    "230cb35e-2d0b-4a36-8349-538a565e7651": {
-      "id": "230cb35e-2d0b-4a36-8349-538a565e7651",
-      "roomCode": "421876",
-      "auctioneerSecret": "1619cbdd-2405-4fe9-a70a-3a14d1df1a5e",
-      "auctioneerName": "Master Kenji",
+    "d68c8143-6794-42a4-861c-fff1742a3c65": {
+      "id": "d68c8143-6794-42a4-861c-fff1742a3c65",
+      "roomCode": "789054",
+      "auctioneerSecret": "1a2825cf-c3b2-4a89-845f-e87292756b8d",
+      "auctioneerName": "Master Auctioneer",
       "startingPurse": 100000,
-      "status": "ENDED",
+      "status": "WAITING",
       "currentPlaceId": null,
-      "createdAt": "2026-10-22T15:30:41.781Z",
-      "endedAt": "2026-10-22T15:30:41.817Z"
+      "createdAt": "2026-10-22T15:32:41.959Z",
+      "endedAt": null
     }
   },
   "teams": {
@@ -402,53 +402,41 @@
       "isClaimed": false,
       "claimedAt": null
     },
-    "18508de9-23b9-4310-964c-4e0f5c92bc18": {
-      "id": "18508de9-23b9-4310-964c-4e0f5c92bc18",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "c9416b53-c23d-40d0-9a70-e2ad7a5b4701": {
+      "id": "c9416b53-c23d-40d0-9a70-e2ad7a5b4701",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Team Sakura",
-      "teamToken": "e288c0a4-510b-4077-a763-4cb79bdf1676",
+      "teamToken": "d1a2aea7-ce0b-4ead-80a4-c445c227e673",
       "color": "#ff758f",
       "colorName": "Sakura Pink",
-      "startingPurse": 100000,
-      "remainingPurse": 85000,
-      "isClaimed": true,
-      "claimedAt": "2026-10-22T15:30:41.783Z"
-    },
-    "aeb2507f-4de0-43d4-a71c-e5021bd89cfa": {
-      "id": "aeb2507f-4de0-43d4-a71c-e5021bd89cfa",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
-      "name": "Team Samurai",
-      "teamToken": "1149c6cb-3c00-4c69-b1ef-9c5e160bff19",
-      "color": "#3b82f6",
-      "colorName": "Samurai Indigo",
-      "startingPurse": 100000,
-      "remainingPurse": 70000,
-      "isClaimed": true,
-      "claimedAt": "2026-10-22T15:30:41.785Z"
-    },
-    "c7b4b766-25b5-4273-bd7a-fffee2cd0960": {
-      "id": "c7b4b766-25b5-4273-bd7a-fffee2cd0960",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
-      "name": "Team Shogun",
-      "teamToken": "23c6e1e3-1d47-4aa4-88cc-16159df6745e",
-      "color": "#10b981",
-      "colorName": "Emerald Forest",
-      "startingPurse": 100000,
-      "remainingPurse": 100000,
-      "isClaimed": true,
-      "claimedAt": "2026-10-22T15:30:41.787Z"
-    },
-    "614e68d1-b914-46d7-beb9-9ef309e3453d": {
-      "id": "614e68d1-b914-46d7-beb9-9ef309e3453d",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
-      "name": "Team Ninja",
-      "teamToken": "ecae754e-126a-4a98-87e5-621f4433e293",
-      "color": "#f59e0b",
-      "colorName": "Imperial Gold",
       "startingPurse": 100000,
       "remainingPurse": 100000,
       "isClaimed": false,
       "claimedAt": null
+    },
+    "bb72f9da-57c5-411b-af1e-6fd81c5675b8": {
+      "id": "bb72f9da-57c5-411b-af1e-6fd81c5675b8",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
+      "name": "Team Samurai",
+      "teamToken": "2765a06e-64aa-4b48-9a74-923429ffe359",
+      "color": "#3b82f6",
+      "colorName": "Samurai Indigo",
+      "startingPurse": 100000,
+      "remainingPurse": 85000,
+      "isClaimed": false,
+      "claimedAt": null
+    },
+    "1eae6579-95d0-41fd-8473-3eb8cfcac9a9": {
+      "id": "1eae6579-95d0-41fd-8473-3eb8cfcac9a9",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
+      "name": "Team Shogun",
+      "teamToken": "74265141-a9d4-43b7-a455-75a4025267b0",
+      "color": "#10b981",
+      "colorName": "Emerald Forest",
+      "startingPurse": 100000,
+      "remainingPurse": 86000,
+      "isClaimed": true,
+      "claimedAt": "2026-10-22T15:32:52.399Z"
     }
   },
   "places": {
@@ -1796,41 +1784,41 @@
       "purchasedByTeamId": null,
       "orderIndex": 11
     },
-    "e156befe-c164-4f09-890f-49ad886a25b2": {
-      "id": "e156befe-c164-4f09-890f-49ad886a25b2",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "9e8171f6-4d47-4e59-b433-f2460825008d": {
+      "id": "9e8171f6-4d47-4e59-b433-f2460825008d",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Mount Fuji (富士山)",
       "imageUrl": "https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=1200&q=80",
       "location": "Shizuoka & Yamanashi Prefecture",
       "description": "Japan's sacred volcanic peak, an immortal symbol of spiritual beauty, crowned with eternal snow and surrounded by misty lakes.",
       "basePrize": 15000,
       "originalValue": 55000,
-      "currentBid": 30000,
+      "currentBid": 15000,
       "currentBidderTeamId": null,
       "status": "SOLD",
-      "purchasedPrice": 30000,
-      "purchasedByTeamId": "aeb2507f-4de0-43d4-a71c-e5021bd89cfa",
+      "purchasedPrice": 15000,
+      "purchasedByTeamId": "bb72f9da-57c5-411b-af1e-6fd81c5675b8",
       "orderIndex": 0
     },
-    "683b7a08-f271-4b67-8b1e-431060dcdadb": {
-      "id": "683b7a08-f271-4b67-8b1e-431060dcdadb",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "2bc9dbb1-e381-48a4-8f08-c39829b6da25": {
+      "id": "2bc9dbb1-e381-48a4-8f08-c39829b6da25",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Fushimi Inari-Taisha (伏見稲荷大社)",
       "imageUrl": "https://images.unsplash.com/photo-1478436127897-769e00d2c715?auto=format&fit=crop&w=1200&q=80",
       "location": "Kyoto Prefecture",
       "description": "Thousands of vermilion torii gates snake up sacred Mount Inari, dedicated to the Shinto deity of agriculture and prosperity.",
       "basePrize": 12000,
       "originalValue": 45000,
-      "currentBid": 15000,
+      "currentBid": 12000,
       "currentBidderTeamId": null,
-      "status": "SOLD",
-      "purchasedPrice": 15000,
-      "purchasedByTeamId": "18508de9-23b9-4310-964c-4e0f5c92bc18",
+      "status": "UPCOMING",
+      "purchasedPrice": null,
+      "purchasedByTeamId": null,
       "orderIndex": 1
     },
-    "2c7f501d-afcd-40a5-8725-d44e680901e6": {
-      "id": "2c7f501d-afcd-40a5-8725-d44e680901e6",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "c92e9e6c-b9e0-4941-acbc-6985011be285": {
+      "id": "c92e9e6c-b9e0-4941-acbc-6985011be285",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Kinkaku-ji (金閣寺 - Golden Pavilion)",
       "imageUrl": "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?auto=format&fit=crop&w=1200&q=80",
       "location": "Kyoto Prefecture",
@@ -1839,14 +1827,14 @@
       "originalValue": 50000,
       "currentBid": 14000,
       "currentBidderTeamId": null,
-      "status": "UPCOMING",
-      "purchasedPrice": null,
-      "purchasedByTeamId": null,
+      "status": "SOLD",
+      "purchasedPrice": 14000,
+      "purchasedByTeamId": "1eae6579-95d0-41fd-8473-3eb8cfcac9a9",
       "orderIndex": 2
     },
-    "e8790af0-e2ba-401c-9b4c-cb92c21bb89f": {
-      "id": "e8790af0-e2ba-401c-9b4c-cb92c21bb89f",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "df2eface-54ff-497d-9541-366bb4c491b5": {
+      "id": "df2eface-54ff-497d-9541-366bb4c491b5",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Shibuya Scramble Crossing (渋谷スクランブル交差点)",
       "imageUrl": "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1200&q=80",
       "location": "Tokyo Metropolis",
@@ -1860,9 +1848,9 @@
       "purchasedByTeamId": null,
       "orderIndex": 3
     },
-    "ea26e855-9b48-44fb-80d7-73925f6acb6d": {
-      "id": "ea26e855-9b48-44fb-80d7-73925f6acb6d",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "90d388a9-9d4c-4c39-89ef-4b00147342c5": {
+      "id": "90d388a9-9d4c-4c39-89ef-4b00147342c5",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Himeji Castle (姫路城 - White Heron)",
       "imageUrl": "https://images.unsplash.com/photo-1528164344705-475426879c0d?auto=format&fit=crop&w=1200&q=80",
       "location": "Hyogo Prefecture",
@@ -1876,9 +1864,9 @@
       "purchasedByTeamId": null,
       "orderIndex": 4
     },
-    "474281d0-ac52-4a0d-81e6-77110d6a514b": {
-      "id": "474281d0-ac52-4a0d-81e6-77110d6a514b",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "bdba88f0-1632-4adf-9d71-dbe87b614ada": {
+      "id": "bdba88f0-1632-4adf-9d71-dbe87b614ada",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Dotonbori Entertainment District (道頓堀)",
       "imageUrl": "https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&fit=crop&w=1200&q=80",
       "location": "Osaka Prefecture",
@@ -1892,9 +1880,9 @@
       "purchasedByTeamId": null,
       "orderIndex": 5
     },
-    "851d7ba6-3e65-4346-9ef3-d99fb3a21bb5": {
-      "id": "851d7ba6-3e65-4346-9ef3-d99fb3a21bb5",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "4d456c6b-a3bd-4a7c-a1c9-391ea0fb3849": {
+      "id": "4d456c6b-a3bd-4a7c-a1c9-391ea0fb3849",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Arashiyama Bamboo Grove (嵐山 竹林の小径)",
       "imageUrl": "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=1200&q=80",
       "location": "Kyoto Prefecture",
@@ -1908,9 +1896,9 @@
       "purchasedByTeamId": null,
       "orderIndex": 6
     },
-    "e4a152f1-d1d3-4c60-8808-34c084beb195": {
-      "id": "e4a152f1-d1d3-4c60-8808-34c084beb195",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "2418f9e3-fb52-4540-993b-90b4ba01d3ea": {
+      "id": "2418f9e3-fb52-4540-993b-90b4ba01d3ea",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Itsukushima Floating Torii (厳島神社)",
       "imageUrl": "https://images.unsplash.com/photo-1504109586057-7a2ae83d1338?auto=format&fit=crop&w=1200&q=80",
       "location": "Miyajima, Hiroshima Prefecture",
@@ -1924,9 +1912,9 @@
       "purchasedByTeamId": null,
       "orderIndex": 7
     },
-    "952b0327-102e-4503-8ce6-f8d38090aa30": {
-      "id": "952b0327-102e-4503-8ce6-f8d38090aa30",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "0428a5db-b23d-4743-aff7-4e97616fc730": {
+      "id": "0428a5db-b23d-4743-aff7-4e97616fc730",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Shirakawa-gō Historic Village (白川郷)",
       "imageUrl": "https://images.unsplash.com/photo-1505069446780-4543663a8a81?auto=format&fit=crop&w=1200&q=80",
       "location": "Gifu Prefecture",
@@ -1940,9 +1928,9 @@
       "purchasedByTeamId": null,
       "orderIndex": 8
     },
-    "4b93856f-2bb5-4849-b8d0-83f446425797": {
-      "id": "4b93856f-2bb5-4849-b8d0-83f446425797",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "be2ad094-0cac-442c-9292-c5f8ee9f023f": {
+      "id": "be2ad094-0cac-442c-9292-c5f8ee9f023f",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Senso-ji Ancient Temple (浅草寺)",
       "imageUrl": "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1200&q=80",
       "location": "Asakusa, Tokyo Metropolis",
@@ -1956,9 +1944,9 @@
       "purchasedByTeamId": null,
       "orderIndex": 9
     },
-    "0f974eac-f225-4d22-a1a4-ff96f625f9c5": {
-      "id": "0f974eac-f225-4d22-a1a4-ff96f625f9c5",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "1ec63e39-56bd-48eb-9a82-ff3647022871": {
+      "id": "1ec63e39-56bd-48eb-9a82-ff3647022871",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Nara Deer Park & Todai-ji (奈良公園)",
       "imageUrl": "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=1200&q=80",
       "location": "Nara Prefecture",
@@ -1972,9 +1960,9 @@
       "purchasedByTeamId": null,
       "orderIndex": 10
     },
-    "a6b35aae-a03f-44ca-8b21-d1133784f123": {
-      "id": "a6b35aae-a03f-44ca-8b21-d1133784f123",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
+    "360d39d5-9d6d-47b8-b9fa-5278d930419b": {
+      "id": "360d39d5-9d6d-47b8-b9fa-5278d930419b",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
       "name": "Akihabara Electric Town (秋葉原)",
       "imageUrl": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1200&q=80",
       "location": "Tokyo Metropolis",
@@ -2050,33 +2038,23 @@
       "status": "CONFIRMED",
       "revertedAt": null
     },
-    "a03ef20e-d4ec-4292-bc2c-f5f888c14ae1": {
-      "id": "a03ef20e-d4ec-4292-bc2c-f5f888c14ae1",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
-      "placeId": "e156befe-c164-4f09-890f-49ad886a25b2",
-      "teamId": "18508de9-23b9-4310-964c-4e0f5c92bc18",
-      "purchasedPrice": 25000,
-      "timestamp": "2026-10-22T15:30:41.795Z",
-      "status": "REVERTED",
-      "revertedAt": "2026-10-22T15:30:41.812Z"
-    },
-    "d7615272-87e3-4070-a19b-57d402a8e4a2": {
-      "id": "d7615272-87e3-4070-a19b-57d402a8e4a2",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
-      "placeId": "e156befe-c164-4f09-890f-49ad886a25b2",
-      "teamId": "aeb2507f-4de0-43d4-a71c-e5021bd89cfa",
-      "purchasedPrice": 30000,
-      "timestamp": "2026-10-22T15:30:41.813Z",
+    "2dfd5cc3-5f80-4407-ba4a-a4a9c007708a": {
+      "id": "2dfd5cc3-5f80-4407-ba4a-a4a9c007708a",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
+      "placeId": "9e8171f6-4d47-4e59-b433-f2460825008d",
+      "teamId": "bb72f9da-57c5-411b-af1e-6fd81c5675b8",
+      "purchasedPrice": 15000,
+      "timestamp": "2026-10-22T15:34:35.255Z",
       "status": "CONFIRMED",
       "revertedAt": null
     },
-    "d58c27ee-19f8-434e-bfc6-5697267a14ed": {
-      "id": "d58c27ee-19f8-434e-bfc6-5697267a14ed",
-      "gameId": "230cb35e-2d0b-4a36-8349-538a565e7651",
-      "placeId": "683b7a08-f271-4b67-8b1e-431060dcdadb",
-      "teamId": "18508de9-23b9-4310-964c-4e0f5c92bc18",
-      "purchasedPrice": 15000,
-      "timestamp": "2026-10-22T15:30:41.815Z",
+    "cd3dbd3c-85a8-4474-9a66-2c3f4d9d9e7f": {
+      "id": "cd3dbd3c-85a8-4474-9a66-2c3f4d9d9e7f",
+      "gameId": "d68c8143-6794-42a4-861c-fff1742a3c65",
+      "placeId": "c92e9e6c-b9e0-4941-acbc-6985011be285",
+      "teamId": "1eae6579-95d0-41fd-8473-3eb8cfcac9a9",
+      "purchasedPrice": 14000,
+      "timestamp": "2026-10-22T15:35:20.170Z",
       "status": "CONFIRMED",
       "revertedAt": null
     }
