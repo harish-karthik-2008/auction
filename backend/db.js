@@ -576,9 +576,18 @@ function confirmPurchase(gameId, placeId, teamId, purchasedPrice) {
   if (!game || !place || place.gameId !== gameId) throw new Error('Place not found');
   if (!team || team.gameId !== gameId) throw new Error('Team not found');
 
-  // Safety check: Cannot sell if already sold unless reopened
+  // If place was already marked sold, automatically revert previous purchase first
   if (place.status === 'SOLD') {
-    throw new Error('This place has already been marked as Sold.');
+    const prevTeamId = place.purchasedByTeamId;
+    Object.values(state.purchases)
+      .filter(p => p.placeId === placeId && p.status === 'CONFIRMED')
+      .forEach(p => {
+        p.status = 'REVERTED';
+        p.revertedAt = new Date().toISOString();
+      });
+    if (prevTeamId) {
+      calculateTeamStats(prevTeamId);
+    }
   }
 
   const price = Number(purchasedPrice);

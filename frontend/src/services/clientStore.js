@@ -372,6 +372,16 @@ export const clientStore = {
       const place = state.places[placeId];
       const { teamId, purchasedPrice } = body;
       const team = state.teams[teamId];
+
+      // If already sold, revert previous team purchase first
+      if (place.status === 'SOLD') {
+        const prevTeamId = place.purchasedByTeamId;
+        Object.values(state.purchases)
+          .filter(p => p.placeId === placeId && p.status === 'CONFIRMED')
+          .forEach(p => { p.status = 'REVERTED'; });
+        if (prevTeamId) this.calculateTeamStats(state, prevTeamId);
+      }
+
       const stats = this.calculateTeamStats(state, teamId);
       if (Number(purchasedPrice) > stats.remainingPurse) {
         throw new Error(`Insufficient funds: ${team.name} only has ${stats.remainingPurse.toLocaleString()} pts.`);
