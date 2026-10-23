@@ -68,14 +68,14 @@ const TEAM_COLORS = [
   { name: 'Bronze Pagoda', code: '#d97706' },
   { name: 'Daimyo Iris', code: '#6366f1' },
   { name: 'Kabuki Rose', code: '#ec4899' },
-  { name: 'Bonsai Olive', code: '#84cc16' },
-  { name: 'Origami Cyan', code: '#06b6d4' }
+  { name: 'Akatsuki Crimson', code: '#e11d48' },
+  { name: 'Fuji Azure', code: '#0ea5e9' }
 ];
 
 /**
  * Create a new Game
  */
-function createGame({ auctioneerName, numTeams = 10, startingPurse = 30000000, customTeamNames = [] }) {
+function createGame({ auctioneerName, numTeams = 12, startingPurse = 30000000, customTeamNames = [] }) {
   const gameId = uuidv4();
   const roomCode = generateRoomCode();
   const auctioneerSecret = uuidv4(); // Kept private to creator
@@ -95,10 +95,10 @@ function createGame({ auctioneerName, numTeams = 10, startingPurse = 30000000, c
   state.games[gameId] = game;
 
   // Initialize Teams
-  const teamsCount = Math.max(2, Math.min(Number(numTeams) || 10, 12));
+  const teamsCount = Math.max(2, Math.min(Number(numTeams) || 12, 12));
   for (let i = 0; i < teamsCount; i++) {
     const teamId = uuidv4();
-    const defaultName = customTeamNames[i] || `Team ${['Sakura', 'Samurai', 'Shogun', 'Ninja', 'Ronin', 'Kitsune', 'Dragon', 'Phoenix', 'Daimyo', 'Kabuki', 'Bonsai', 'Origami'][i] || (i + 1)}`;
+    const defaultName = customTeamNames[i] || `Team ${['Sakura', 'Samurai', 'Shogun', 'Ninja', 'Ronin', 'Kitsune', 'Dragon', 'Phoenix', 'Daimyo', 'Kabuki', 'Akatsuki', 'Fuji'][i] || (i + 1)}`;
     const teamToken = uuidv4();
     const color = TEAM_COLORS[i % TEAM_COLORS.length];
 

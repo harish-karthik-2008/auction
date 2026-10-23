@@ -37,7 +37,7 @@ export default function EntryPage({ onAuctionCreated, onTeamJoined }) {
 
   // Create Auction Form state
   const [auctioneerName, setAuctioneerName] = useState('Master Auctioneer');
-  const [numTeams, setNumTeams] = useState(10);
+  const [numTeams, setNumTeams] = useState(12);
   const [startingPurse, setStartingPurse] = useState(30000000);
 
   // Join Auction Form state
@@ -554,17 +554,18 @@ export default function EntryPage({ onAuctionCreated, onTeamJoined }) {
                 <input
                   type="range"
                   min="2"
-                  max="10"
+                  max="12"
                   value={numTeams}
                   onChange={(e) => setNumTeams(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--sakura-primary)' }}
                 />
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                  <span>2 Teams</span>
-                  <span>4 Teams</span>
-                  <span>6 Teams</span>
-                  <span>8 Teams</span>
-                  <span>10 Teams</span>
+                  <span>2</span>
+                  <span>4</span>
+                  <span>6</span>
+                  <span>8</span>
+                  <span>10</span>
+                  <span>12 Teams</span>
                 </div>
               </div>
 

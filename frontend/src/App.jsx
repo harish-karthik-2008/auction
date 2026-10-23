@@ -51,7 +51,7 @@ export default function App() {
   const [errorMessage, setErrorMessage] = useState('');
 
   // Configuration modal state
-  const [configNumTeams, setConfigNumTeams] = useState(state.teams.length || 10);
+  const [configNumTeams, setConfigNumTeams] = useState(state.teams.length || 12);
   const [configPurse, setConfigPurse] = useState(state.startingPurse || 30000000);
   const [configAuctioneerName, setConfigAuctioneerName] = useState(state.auctioneerName || 'Master Auctioneer');
 
@@ -301,14 +301,14 @@ export default function App() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
           <button
             onClick={() => {
-              if (window.confirm('Reset catalog to official 30 Japanese cities with tiered prices (¥3M, ¥2M, ¥1M) and 10 teams?')) {
+              if (window.confirm('Reset catalog to official 30 Japanese cities with tiered prices (¥3M, ¥2M, ¥1M) and 12 teams?')) {
                 const fresh = resetToOfficialCatalog();
                 setState(fresh);
               }
             }}
             className="btn-navy"
             style={{ padding: '8px 16px', fontSize: '0.85rem', border: '1px solid rgba(255, 117, 143, 0.4)' }}
-            title="Reload official 30 cities with ¥3M/¥2M/¥1M base prizes and 10 teams"
+            title="Reload official 30 cities with ¥3M/¥2M/¥1M base prizes and 12 teams"
           >
             <RotateCcw size={15} color="var(--sakura-primary)" />
             <span>Reset Official 30 Cities</span>
@@ -1021,17 +1021,18 @@ export default function App() {
                 <input
                   type="range"
                   min="2"
-                  max="10"
+                  max="12"
                   value={configNumTeams}
                   onChange={(e) => setConfigNumTeams(Number(e.target.value))}
                   style={{ width: '100%', accentColor: 'var(--sakura-primary)' }}
                 />
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                  <span>2 Teams</span>
-                  <span>4 Teams</span>
-                  <span>6 Teams</span>
-                  <span>8 Teams</span>
-                  <span>10 Teams</span>
+                  <span>2</span>
+                  <span>4</span>
+                  <span>6</span>
+                  <span>8</span>
+                  <span>10</span>
+                  <span>12 Teams</span>
                 </div>
               </div>
 

@@ -1,7 +1,7 @@
 // Complete, self-contained Auctioneer Engine with localStorage persistence
 import { defaultPlacesList } from '../services/defaultPlacesList';
 
-const STORAGE_KEY = 'japan_auction_arena_tiered_prices_v2';
+const STORAGE_KEY = 'japan_auction_arena_12_teams_v1';
 
 const TEAM_PRESETS = [
   { name: 'Team Sakura', color: '#ff758f' },
@@ -14,8 +14,8 @@ const TEAM_PRESETS = [
   { name: 'Team Phoenix', color: '#d97706' },
   { name: 'Team Daimyo', color: '#6366f1' },
   { name: 'Team Kabuki', color: '#ec4899' },
-  { name: 'Team Bonsai', color: '#84cc16' },
-  { name: 'Team Origami', color: '#06b6d4' }
+  { name: 'Team Akatsuki', color: '#e11d48' },
+  { name: 'Team Fuji', color: '#0ea5e9' }
 ];
 
 function generateId() {
@@ -23,9 +23,9 @@ function generateId() {
 }
 
 // Initial state builder
-export function createInitialState(numTeams = 10, startingPurse = 30000000, auctioneerName = 'Master Auctioneer') {
+export function createInitialState(numTeams = 12, startingPurse = 30000000, auctioneerName = 'Master Auctioneer') {
   const teams = [];
-  const teamCount = Math.max(2, Math.min(Number(numTeams) || 10, 10));
+  const teamCount = Math.max(2, Math.min(Number(numTeams) || 12, 12));
 
   for (let i = 0; i < teamCount; i++) {
     const preset = TEAM_PRESETS[i % TEAM_PRESETS.length];
@@ -72,6 +72,7 @@ export function loadAuctionState() {
       'japan_auction_arena_30_cities_v1',
       'japan_auction_arena_10_teams_v1',
       'japan_auction_arena_3tiered_base_v1',
+      'japan_auction_arena_tiered_prices_v2',
       'jp_auction_arena_db_v1',
       'japan_auction_arena_cache',
       'auction_state'
@@ -83,7 +84,7 @@ export function loadAuctionState() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      // Validate 30 cities, 10 teams, and correct tiered base prizes
+      // Validate 30 cities, 12 teams, and correct tiered base prizes
       const hasTieredPrices =
         parsed.places &&
         parsed.places.length === 30 &&
@@ -91,9 +92,9 @@ export function loadAuctionState() {
         parsed.places[10]?.basePrize === 2000000 &&
         parsed.places[20]?.basePrize === 1000000;
 
-      const hasTenTeams = parsed.teams && parsed.teams.length >= 10;
+      const hasTwelveTeams = parsed.teams && parsed.teams.length >= 12;
 
-      if (hasTieredPrices && hasTenTeams) {
+      if (hasTieredPrices && hasTwelveTeams) {
         return parsed;
       }
     }
@@ -101,8 +102,8 @@ export function loadAuctionState() {
     console.error('Error loading auction state:', err);
   }
 
-  // Create clean state with 10 teams and 30 tiered cities
-  const fresh = createInitialState(10, 30000000);
+  // Create clean state with 12 teams and 30 tiered cities
+  const fresh = createInitialState(12, 30000000);
   saveAuctionState(fresh);
   return fresh;
 }
@@ -112,7 +113,7 @@ export function resetToOfficialCatalog() {
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch (e) {}
-  const fresh = createInitialState(10, 30000000);
+  const fresh = createInitialState(12, 30000000);
   saveAuctionState(fresh);
   return fresh;
 }
